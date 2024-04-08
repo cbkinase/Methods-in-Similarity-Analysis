@@ -54,7 +54,7 @@ A <b><i>k</i>-shingle</b> (or <b><i>k</i>-gram</b>) for a document is a sequence
 
 For example, if our document is "abcab" and we set $k=2$, then our set of 2-shingles is
 
-$$ \{\text{ab}, \text{bc}, \text{ca}\}$$
+$$ \lbrace \text{ab}, \text{bc}, \text{ca} \rbrace$$
 
 It is important that we convince ourselves that shingling preserves similarity between documents as we would think about it intuitively. To what extent does having shingles in common imply similarity?
 
