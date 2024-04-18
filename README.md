@@ -62,26 +62,26 @@ We will apply three key techniques in our analysis. At a high level, here is how
 
 ![TODO: alt text](https://i.gyazo.com/8866764a78b5e26e93d44fdd914ac574.png)
 
-The benefits of this three step procedure are twofold. First, by shingling and MinHashing, we convert documents into comparatively much shorter signatures, allowing us to work more in main memory. However, this alone wouldn't be enough, as we'd still be considering a number of pairs that is quadratic with respect to the number of sets. Locality-sensitive hashing massively reduces the number of candidate pairs we must consider.
+The benefits of this three-step procedure are twofold. First, by shingling and MinHashing, we convert documents into comparatively much shorter signatures, allowing us to work more in main memory. However, this alone wouldn't be enough, as we'd still be considering a quantity of pairs that is quadratic with respect to the number of sets. Locality-sensitive hashing massively reduces the number of candidate pairs we must consider.
 
-All of this introduces the risks of false positives (i.e., we claim two sets are similar when they are in fact not) and false negatives (erroneously claiming that two sets are not similar), but we are able to control the error rates by tuning various parameters to our liking.
+All of this introduces the risks of false positives (i.e., we claim two sets are similar when they are not) and false negatives (erroneously claiming that two sets are not similar), but we can control the error rates by tuning various parameters to our liking.
 
 
 # Shingling
 
-A <b><i>k</i>-shingle</b> (or <b><i>k</i>-gram</b>) for a document is a sequence of $k$ characters that appears in the document. We can represent a document by its set of <i>k</i>-shingles.
+A <b><i>k</i>-shingle</b> (or <b><i>k</i>-gram</b>) for a document is a sequence of $k$ characters that appear in the document. We can represent a document by its set of <i>k</i>-shingles.
 
 For example, if our document is "abcab" and we set $k=2$, then our set of 2-shingles is
 
 $$ \lbrace \text{ab}, \text{bc}, \text{ca} \rbrace$$
 
-It's worth noting two things here. The first is that we don't necessarily need to partition by characters. Shingles could in principle be letters, words, lines, or, from a mathematical point of view, anything countable. Secondly, it is also possible to documents with <i>labelled k-shingling</i>, which also stores the occurrence number for each element, though this is less efficient.
+It's worth noting two things here. The first is that we don't necessarily need to partition by characters. Shingles could in principle be letters, words, lines, or, from a mathematical point of view, anything countable. Secondly, it is also possible to represent documents with <i>labelled k-shingling</i>, which also stores the occurrence number for each element, though this is less efficient.
 
 $k$ should be selected to be large enough that the probability of finding a random shingle in a random document is quite low. The exact number might depend on the nature of the document &mdash; e.g., $k=5$ might suffice for a tweet, but for a news article $k=10$ might be more appropriate.
 
-We often compress long shingles to save space, hashing them into <b>tokens</b>. This can save upwards of 60% on space by converting a string of length 10 into a 4 byte token &mdash; the amount of bytes needed to store the amount of buckets for the entire set of <i>k</i>-shingles.
+We often compress long shingles to save space, hashing them into <b>tokens</b>. This can save upwards of 60% on space by converting a string of length 10 into a 4-byte token &mdash; the number of bytes needed to store the number of buckets for the entire set of <i>k</i>-shingles.
 
-Ultimately, then, we can represent a document by its tokens: the set of hash values of its <i>k</i>-shingles. Of course, there is the rare possibility that two documents could appear to have shingles in common, when in fact only hash values were shared.
+Ultimately, we can represent a document by its tokens: the set of hash values of its <i>k</i>-shingles. Of course, there is the rare possibility that two documents could appear to have shingles in common, when in fact only hash values were shared.
 
 
 # MinHashing
@@ -99,7 +99,7 @@ $$ J(A, \space B) = \frac{| S_A \space \cap \space S_B |}{| S_A \space \cup \spa
 
 ## From Sets to Boolean Matrices
 
-Instead of thinking of our data as a collection of sets, it's helpful to conceptualize it instead as a Boolean matrix, even if it unlikely to actually be stored that way, or ever be materialized in the first place.
+Instead of thinking of our data as a collection of sets, it's helpful to conceptualize it instead as a Boolean matrix, even if it is unlikely to be stored that way, or ever be materialized in the first place.
 
 1) Let the rows of the matrix be the elements of the universal set: for example, the set of all <i>k</i>-shingles.
 2) Let the columns of the matrix represent each set.
@@ -141,7 +141,7 @@ $$ \overline{S}_D =
   \min \lbrace \pi_1 (S_D) \rbrace , \space
   \min \lbrace \pi_2 (S_D) \rbrace , \space
   \dots \space , \space
-  \min \lbrace \pi\_{100} (S_D) \rbrace
+  \min \lbrace \pi _{100} (S_D) \rbrace
 ) $$
 
 and so the Jaccard similarity of two sets $A$ and $B$ is readily estimated by comparing how many corresponding elements in $\overline{S}_A$ and $\overline{S}_B$ are common. Since it is impossible to choose $\pi$ uniformly at random in $S_n$, for practical purposes we relax this constraint slightly and allow $\mathscr{F}$ to be <i>approximately</i> min-wise independent, where
